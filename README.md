@@ -15,10 +15,10 @@ Place the three `userChrome.*` files in a `/chrome` directory inside your Firefo
 Replace the contents of `userChrome.js` with whatever you wish; it will execute in the browser context whenever you open a new browser window. The existing contents of that script (in this repo) are a small change to the fullscreen behavior of Firefox under macOS: it restores the pre-Lion behavior (and hides the toolbar and tabs when in fullscreen mode).
 
 You may also place `userChrome.xul` and `.uc.js`, `.uc.xul` and `.css` files in the `/chrome` directory, these will be loaded along with `userChrome.js`. 
- - userChrome.xul and .uc.xul files are [XUL overlays](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Overlays) that will load into the browser.
- - .uc.js files will execute javascript in the browser context, like userChrome.js. 
- - .css files will loaded as USER_SHEETs into all pages, including the ui ('chrome://' urls), a sort of userChrome/userContent hybrid. Use `@-moz-document` rules to limit them to certain pages. (userChrome.css and userContent.css will behave as normal).
- - A special case, .as.css files, are loaded as AGENT_SHEETs, allowing you to style anonymous content like scrollbars.
+ - `userChrome.xul` and `.uc.xul` files are [XUL overlays](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Overlays) that will load into the browser.
+ - `.uc.js` files will execute javascript in the browser context, like `userChrome.js`. 
+ - `.css` files will loaded as USER_SHEETs into all pages, including the ui (chrome:// urls), a sort of userChrome/userContent hybrid. Use `@-moz-document` rules to limit them to certain pages. (userChrome.css and userContent.css will behave as normal).
+ - A special case, `.as.css` files, are loaded as AGENT_SHEETs, allowing you to style anonymous content like scrollbars.
 
 To uninstall, remove the three files. If you have other content in the `userChrome.css` file you can remove just the part that you added during installation.
 
