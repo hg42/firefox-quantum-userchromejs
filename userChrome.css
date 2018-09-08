@@ -5,6 +5,6 @@ https://opensource.org/licenses/MIT
 
 @namespace url(http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul);
 
-toolbarbutton#alltabs-button {
+#PanelUI-menu-button {
     -moz-binding: url("userChrome.xml#js");
 }
