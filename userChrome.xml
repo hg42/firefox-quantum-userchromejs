@@ -11,33 +11,39 @@ https://opensource.org/licenses/MIT
             <constructor><![CDATA[
                 if(window.userChromeJsMod) return;
                 window.userChromeJsMod = true;
-                
+
                 var chromeFiles = FileUtils.getDir("UChrm", []).directoryEntries;
                 var xulFiles = [];
                 var sss = Cc['@mozilla.org/content/style-sheet-service;1'].getService(Ci.nsIStyleSheetService);
-                
+
                 while(chromeFiles.hasMoreElements()) {
                     var file = chromeFiles.getNext().QueryInterface(Ci.nsIFile);
                     var fileURI = Services.io.newFileURI(file);
-                    
+
                     if(file.isFile()) {
-                        if(/(^userChrome|\.uc)\.js$/i.test(file.leafName)) {
-                            Services.scriptloader.loadSubScriptWithOptions(fileURI.spec, {target: window, ignoreCache: true});
+                        console.log("----------\\ " + file.leafName);
+                        try {
+                            if(/(^userChrome|\.uc)\.js$/i.test(file.leafName)) {
+                                Services.scriptloader.loadSubScriptWithOptions(fileURI.spec, {target: window, ignoreCache: true});
+                            }
+                            else if(/(^userChrome|\.uc)\.xul$/i.test(file.leafName)) {
+                                xulFiles.push(fileURI.spec);
+                            }
+                            else if(/\.as\.css$/i.test(file.leafName)) {
+                                if(!sss.sheetRegistered(fileURI, sss.AGENT_SHEET))
+                                    sss.loadAndRegisterSheet(fileURI, sss.AGENT_SHEET);
+                            }
+                            else if(/^(?!(userChrome|userContent)\.css$).+\.css$/i.test(file.leafName)) {
+                                if(!sss.sheetRegistered(fileURI, sss.USER_SHEET))
+                                    sss.loadAndRegisterSheet(fileURI, sss.USER_SHEET);
+                            }
+                        } catch(e) {
+                            console.log("########## ERROR: " + e + " at " + e.lineNumber + ":" + e.columnNumber);
                         }
-                        else if(/(^userChrome|\.uc)\.xul$/i.test(file.leafName)) {
-                            xulFiles.push(fileURI.spec);
-                        }
-                        else if(/\.as\.css$/i.test(file.leafName)) {
-                            if(!sss.sheetRegistered(fileURI, sss.AGENT_SHEET))
-                                sss.loadAndRegisterSheet(fileURI, sss.AGENT_SHEET);
-                        }
-                        else if(/^(?!(userChrome|userContent)\.css$).+\.css$/i.test(file.leafName)) {
-                            if(!sss.sheetRegistered(fileURI, sss.USER_SHEET))
-                                sss.loadAndRegisterSheet(fileURI, sss.USER_SHEET);
-                        }
+                        console.log("----------/ " + file.leafName);
                     }
                 }
-                
+
                 setTimeout(function loadXUL() {
                     if(xulFiles.length > 0) {
                         document.loadOverlay(xulFiles.shift(), null);
